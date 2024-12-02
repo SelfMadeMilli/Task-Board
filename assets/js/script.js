@@ -34,7 +34,7 @@ function saveProjectsToStorage(task) {
     // Create a task card from the information passed in the task parameter and returned it.
     function createTaskCard(task) {
      const card = $('<div>');
-     card.addClass('card task-card draggable');"
+     card.addClass('card task-card draggable my-3');"
      card.attr('data-task-id', task.id);
      const cardHeader = $('<div>').addClass ('card-header').text (task.title);
      const cardBody = $( '<div>').addClass('card-body');
@@ -51,7 +51,7 @@ function saveProjectsToStorage(task) {
         const now = dayjs();
         const taskDueDate = dayjs(task.dueDate, 'DD/MM/YYYY');
 
-     // If the task is due today, make the card yellow. If it is overdue, make it red.
+     // Task will turn yellow if task is due today. Tasks will turn red if they're overdue
         if (now.isSame(taskDueDate, 'day')) {
             taskCard.addClass('bg-warning text-white');
           } else if (now.isAfter(taskDueDate)) {
@@ -59,7 +59,7 @@ function saveProjectsToStorage(task) {
             cardDeleteBtn.addClass('border-light');
           }
         }
-    // Gather all elements created above, append them to their correct elements.
+    // Append them to their correct elements.
     cardBody.append(cardDescription,cardDueDate, cardDeleteBtn);
     card.append(cardHeader, cardBody);
 
@@ -68,7 +68,7 @@ return taskcard;
 function printTaskData() {
     const task = readtaskFromStorage();
   
-    // Empty existing task cards out of current lanes
+    // Empty existing task cards 
     const todoList = $('#todo-cards');
     todoList.empty();
   
@@ -78,7 +78,7 @@ function printTaskData() {
     const doneList = $('#done-cards');
     doneList.empty();
   
-    // Loop through the tasks,  create task cards for each status
+    //Create task cards for each status
     for (let Task of Task) {
       if (task.status === 'to-do') {
         todoList.append(createTaskCard(Task));
