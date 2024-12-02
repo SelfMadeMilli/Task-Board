@@ -1,3 +1,66 @@
+:root {
+
+  --red: #e74c3c;
+  --lightred: #f9eae7;
+  --lightyellow: #fff5d1;
+  --darkgreen: #417745;
+  
+  
+
+}
+
+ /* Apply font */
+body {
+  font-family: 'Fira Sans', sans-serif;
+  font-weight: 400;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: 700;
+}
+
+
+
+}
+
+.btn-custom:hover {
+  color: var(--darkgreen);
+}
+
+.swim-lanes {
+  min-height: 60vh;
+}
+
+.task-card {
+  margin: 0 auto;
+}
+
+.task-card:hover {
+  cursor: grab;
+}
+
+
+/* style project rows based on task status (late, due today) */
+.project-late {
+  background-color: var(--lightred);
+}
+
+.project-today {
+  background-color: var(--lightyellow);
+}
+
+
+
+
+
+
+
+
 body {
   font-family: 'Open Sans', sans-serif;
   font-size: 16px;

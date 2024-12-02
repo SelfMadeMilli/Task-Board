@@ -25,26 +25,53 @@ function saveProjectsToStorage(task) {
     localStorage.setItem('task', JSON.stringify(task));
 }
 
+// Function to generate a unique task ID
+function generateTaskId() {
+  return `task-${currentId++}`; // Generate a new ID in the format "task-0", "task-1", etc.
+}
 
-     // Todo: create a function to generate a unique task id
-       function generateTaskId() {
+Create a new task and card 
 
+// Function to create a new task
+function createNewTask(title, description, dueDate) {
+  const newTask = {
+    id: generateTaskId(), // Call the function to get a unique ID
+    title: title, // Pass the title as a parameter
+    description: description, // Pass the description as a parameter
+    dueDate: dueDate, // Pass the due date as a parameter
+    status: "todo", // Default status for new tasks
+  };
 
+  // Here you would typically add the new task to your task array
+  tasks.push(newTask); // Assuming 'tasks' is your array of tasks
+  saveTasksToLocalStorage(); // Function to save tasks to local storage
+  return newTask; // Return the new task object for further processing
+}
 
-    // Create a task card from the information passed in the task parameter and returned it.
-    function createTaskCard(task) {
-     const card = $('<div>');
-     card.addClass('card task-card draggable my-3');"
-     card.attr('data-task-id', task.id);
-     const cardHeader = $('<div>').addClass ('card-header').text (task.title);
-     const cardBody = $( '<div>').addClass('card-body');
-     const cardDescription = $("<p>").addClass ("card-text").text (task.description);
-     const cardDueDate = $('<p>').addClass('card-text').text(task.dueDate);
-     const cardDeleteBtn = $('<button>')
-       .addClass('btn btn-danger delete')
-       .text('Delete')
-       .attr('data-task-id',task.id);
-     cardDeleteBtn.on('click', handleDeleteTask);
+// Function to create a task card from the task object
+function createTaskCard(task) {
+  const card = $('<div>');
+  card.addClass('card task-card draggable my-3');
+  card.attr('data-task-id', task.id);
+  
+  const cardHeader = $('<div>').addClass('card-header').text(task.title);
+  const cardBody = $('<div>').addClass('card-body');
+  const cardDescription = $("<p>").addClass("card-text").text(task.description);
+  const cardDueDate = $('<p>').addClass('card-text').text(task.dueDate);
+  
+  const cardDeleteBtn = $('<button>')
+    .addClass('btn btn-danger delete')
+    .text('Delete')
+    .attr('data-task-id', task.id);
+  
+  cardDeleteBtn.on('click', handleDeleteTask); // Attach delete handler
+
+  // Append elements to the card
+  cardBody.append(cardDescription, cardDueDate, cardDeleteBtn);
+  card.append(cardHeader, cardBody);
+
+  return card; // Return the constructed card
+}
 
     // The card background color will be based on the due date. Will only apply the styles if the dueDate exists and the status is not done.
      if (task.dueDate && task.status !== 'done') {
@@ -167,19 +194,25 @@ $('.draggable').draggable({
     // Retrieve task id from the event
     const taskId = ui.draggable[0].dataset.taskId;
   
-    // Retrieve the id of the lane where card was dropped 
-    const newStatus = event.target.id;
-  
-    for (let task of task) {
-      // Find task card by locating the id and updating the task status
-      if (task.id === taskId) {
-        task.status = newStatus;
-      }
-    }
-    // Save updated task array to the local storge, provide new task data
-    localStorage.setItem('task', JSON.stringify(task));
-    printTaskData();
-   });
-});
-  
+// Retrieve the id of the lane where the card was dropped 
+const newStatus = event.target.id;
 
+// Update the task status based on the dropped lane
+let taskFound = false; // Flag to check if the task was found
+for (let task of tasks) {
+  if (task.id === taskId) {
+    task.status = newStatus;
+    taskFound = true; // Set flag to true if task is found
+    break; // Exit loop once the task is found and updated
+  }
+}
+
+if (taskFound) {
+  // Save updated task array to local storage
+  localStorage.setItem('tasks', JSON.stringify(tasks));
+
+  // Refresh the UI to reflect updated task data
+  printTaskData();
+} else {
+  console.error("Task not found: ", taskId); // Log an error if task is not found
+}
